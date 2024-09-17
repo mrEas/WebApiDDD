@@ -1,8 +1,10 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 
 namespace App.Application.Customers.Commands
 {
-    public record CreateCustomerCommand(string FirstName,
+    public record CreateCustomerCommand(
+      string FirstName,
       string LastName,
       string Email,
       string PhoneNumber,
@@ -11,5 +13,5 @@ namespace App.Application.Customers.Commands
       string Line2,
       string City,
       string State,
-      string ZipCode) : IRequest<Unit>;
+      string ZipCode) : IRequest<ErrorOr<Unit>>;
 }
