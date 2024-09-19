@@ -2,21 +2,15 @@
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace App.Application.Common.Validation
 {
-    //Красная линия через весь pipline, cross-cutting concerns 
+    //cross-cutting concerns 
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TRequest>
         where TResponse : IErrorOr
     {
         private readonly IValidator<TRequest>? _validator;
-        //Прокинули в шаг pipeline любой валидатор
         public ValidationBehavior(IValidator<TRequest> validator)
         {
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -26,7 +20,7 @@ namespace App.Application.Common.Validation
         {
             if (_validator is null)
             {
-                return await next(); // если валидатора нет, идем дальше
+                return await next(); 
             }
 
             var validatorResult = await _validator.ValidateAsync(request, cancellationToken);

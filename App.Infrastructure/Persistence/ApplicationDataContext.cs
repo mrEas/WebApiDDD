@@ -9,13 +9,13 @@ namespace App.Infrastructure.Persistence
     public class ApplicationDataContext : DbContext, IUnitOfWork
     {
         private readonly IPublisher _publisher; // MediatR
-        
+        public DbSet<Customer> Customers { get; set; }
+
         public ApplicationDataContext(DbContextOptions<ApplicationDataContext> options, IPublisher publisher) : base(options)
         {
             _publisher = publisher?? throw new ArgumentNullException(nameof(publisher));
         }
-
-        public DbSet<Customer> Customers { get; set; }
+         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {            
             // все конфиги которые хранятся в сборке будут автоматом подключены
@@ -23,16 +23,16 @@ namespace App.Infrastructure.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDataContext).Assembly);
         }
 
-
+        //IUnitOfWork
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             //Можно обработать евенты до или после SaveChangesAsync
             //Если после SaveChangesAsync обработать EventHandlers и если в них будет работа с Бд, то будет второй раз вызов SaveChangesAsync, это нужно избежать
             //Евенты вытаскиваются из кэша EF
             IEnumerable<DomainEvent> events = ChangeTracker.Entries<AggregateRoot>() //Фильтруем изменения только те у кого есть состояние AggregateRoot.//При изменении наших агрегатов, тут получим изменения всех сущностей которые агрегаты
-                        .Select(e => e.Entity) //вытащили классы AggregateRoot
+                        .Select(e => e.Entity) //получили сущности агрегатов
                         .Where(e => e.GetDomainEvents().Any()) //только те, в которых были брошены евенты
-                        .SelectMany(e=>e.GetDomainEvents()); //достать коллекции коллекции, т.к. на каждом агрегате может быть несколько евентов
+                        .SelectMany(e=>e.GetDomainEvents()); //достать коллекции коллекций, т.к. на каждом агрегате может быть несколько евентов
 
             foreach(var @event in events)
             {
