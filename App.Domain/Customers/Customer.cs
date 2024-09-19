@@ -14,6 +14,8 @@ namespace App.Domain.Customers
         public Address Address { get; private set; }
         public bool IsActive { get; private set; }
 
+        //For EF 
+        private Customer(){}
         public Customer(CustomerId id, string firstName, string lastName, Email email = null, PhoneNumber phoneNumber = null, Address address = null, bool isActive = false)
         {
             Id = id;

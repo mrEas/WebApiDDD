@@ -18,4 +18,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 } 
 
+app.MapControllers(); //Middlware Pipline
+
 app.Run();
