@@ -1,4 +1,6 @@
-﻿namespace App.Api
+﻿using App.Api.Middlwares;
+
+namespace App.Api
 {
     public static class DependencyInjection
     {
@@ -7,6 +9,7 @@
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            services.AddTransient<GlobalExeptionHandler>();
 
             return services;
         }
