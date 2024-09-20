@@ -2,38 +2,55 @@
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+using System.Reflection;
 
 namespace App.Application.Common.Validation
 {
     //cross-cutting concerns 
+    //https://www.codecrafting.tips/code-chronicles-26-application-flow-control-with-erroror/
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TRequest>
         where TResponse : IErrorOr
     {
         private readonly IValidator<TRequest>? _validator;
-        public ValidationBehavior(IValidator<TRequest> validator)
+        public ValidationBehavior(IValidator<TRequest>? validator)
         {
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
+            _validator = validator;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             if (_validator is null)
             {
-                return await next(); 
+                return await next();
             }
 
-            var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
+            var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
-            if (validatorResult.IsValid)
+            if (validationResult.IsValid)
             {
                 return await next();
             }
 
-            List<Error> errors = validatorResult.Errors.ConvertAll(ValidationFailure =>
-                 Error.Validation(ValidationFailure.PropertyName, ValidationFailure.ErrorMessage));
+            return TryCreateResponseFromErrors(validationResult.Errors, out var response)
+                ? response
+                : throw new FluentValidation.ValidationException(validationResult.Errors);
+        }
 
-            return (dynamic)errors;
+        private static bool TryCreateResponseFromErrors(List<ValidationFailure> validationFailures, out TResponse response)
+        {
+            List<Error> errors = validationFailures.ConvertAll(x => Error.Validation(
+                    code: x.PropertyName,
+                    description: x.ErrorMessage));
+
+            response = (TResponse?)typeof(TResponse)
+                .GetMethod(
+                    name: nameof(ErrorOr<object>.From),
+                    bindingAttr: BindingFlags.Static | BindingFlags.Public,
+                    types: new[] { typeof(List<Error>) })?
+                .Invoke(null, new[] { errors })!;
+
+            return response is not null;
         }
     }
 }
