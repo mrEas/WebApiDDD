@@ -20,7 +20,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<GlobalExeptionHandler>();
-
 app.MapControllers(); //Middlware Pipline
 
 app.Run();
