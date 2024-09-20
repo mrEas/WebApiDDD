@@ -17,9 +17,7 @@ namespace App.Infrastructure.Repositories
         public void Delete(Customer customer) => _context.Customers.Remove(customer);
 
         public async Task<List<Customer>> GetAllAsync() => await _context.Customers.ToListAsync();
-
         public async Task<Customer?> GetByIdAsync(CustomerId id) => await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
-
         public async Task<bool> IsExistAsync(CustomerId id) => await _context.Customers.AnyAsync(c => c.Id == id);
     }
 }
