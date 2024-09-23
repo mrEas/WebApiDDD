@@ -6,13 +6,43 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace App.Api.Controllers
 {
+    [ApiController]
     [Route("customers")]
-    public class CustomerController : ControllerBase
+    public class CustomerController : ApiControllerBase
     {
-        private readonly ISender _sender; 
+        private readonly ISender _sender;
         public CustomerController(ISender sender)
         {
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateCustomerCommand createCustomerCommand)
+        {
+            var result = await _sender.Send(createCustomerCommand);
+            return result.Match(customerId => Ok(customerId), errors => Problem(errors));
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> Update([FromBody] UpdateCustomerCommand updateCustomerCommand)
+        {
+            var result = await _sender.Send(updateCustomerCommand);
+            return result.Match(customerId => Ok(customerId), errors => Problem(errors));
+        }
+
+        [HttpDelete("{customerId}")]
+        public async Task<IActionResult> DeleteCustomer(string customerId)
+        {
+            if (!Guid.TryParse(customerId, out var guidId))
+            {
+                return BadRequest("Invalid customer ID");
+            }
+
+            var customerIdValue = new CustomerId(guidId);
+            var query = new DeleteCustomerCommand(customerIdValue);
+            var result = await _sender.Send(query);
+
+            return result.Match(customerId => Ok(customerId), errors => Problem(errors)); 
         }
 
         [HttpGet]
@@ -20,6 +50,7 @@ namespace App.Api.Controllers
         {
             var query = new GetAllCustomersQuery();
             var result = await _sender.Send(query);
+
             return Ok(result);
         }
 
@@ -45,59 +76,19 @@ namespace App.Api.Controllers
         [HttpGet("exists/{customerId}")]
         public async Task<IActionResult> IsCustomerExist(string customerId)
         {
-            if(!Guid.TryParse(customerId, out var guidId))
-            {
-                return BadRequest("Invalid customer ID");
-            }
-            var customerIdValue = new CustomerId(guidId);
-             var query = new IsCustomerExistQuery(customerIdValue);
-            var result = await _sender.Send(query);
-            
-            if(!result)
-                return NotFound();
-            
-            return Ok(result);
-        }
-
-        [HttpDelete("{customerId}")]
-        public async Task<IActionResult> DeleteCustomer(string customerId)
-        {
             if (!Guid.TryParse(customerId, out var guidId))
             {
                 return BadRequest("Invalid customer ID");
             }
-
             var customerIdValue = new CustomerId(guidId);
-            var query = new DeleteCustomerCommand(customerIdValue);
+            var query = new IsCustomerExistQuery(customerIdValue);
             var result = await _sender.Send(query);
 
-            if (result.IsError)
-            {
+            if (!result)
                 return NotFound();
-            }
+
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateCustomerCommand createCustomerCommand)
-        {
-            var result = await _sender.Send(createCustomerCommand);
-            if (result.IsError)
-            {
-                return BadRequest(result.Errors);
-            }
-            return Ok(result);
-        }
-        
-        [HttpPatch]
-        public async Task<IActionResult> Update([FromBody] UpdateCustomerCommand updateCustomerCommand)
-        { 
-            var result = await _sender.Send(updateCustomerCommand);
-            if (result.IsError)
-            {
-                return BadRequest(result.Errors);
-            }
-            return Ok(result);
-        }
     }
 }
