@@ -42,6 +42,23 @@ namespace App.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("exists/{customerId}")]
+        public async Task<IActionResult> IsCustomerExist(string customerId)
+        {
+            if(!Guid.TryParse(customerId, out var guidId))
+            {
+                return BadRequest("Invalid customer ID");
+            }
+            var customerIdValue = new CustomerId(guidId);
+             var query = new IsCustomerExistQuery(customerIdValue);
+            var result = await _sender.Send(query);
+            
+            if(!result)
+                return NotFound();
+            
+            return Ok(result);
+        }
+
         [HttpDelete("{customerId}")]
         public async Task<IActionResult> DeleteCustomer(string customerId)
         {
