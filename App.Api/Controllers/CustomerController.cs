@@ -1,6 +1,7 @@
 ﻿using App.Application.Customers.Commands;
 using App.Application.Customers.Queries;
 using App.Domain.Customers;
+using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -82,6 +83,17 @@ namespace App.Api.Controllers
         public async Task<IActionResult> Create([FromBody] CreateCustomerCommand createCustomerCommand)
         {
             var result = await _sender.Send(createCustomerCommand);
+            if (result.IsError)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok(result);
+        }
+        
+        [HttpPatch]
+        public async Task<IActionResult> Update([FromBody] UpdateCustomerCommand updateCustomerCommand)
+        { 
+            var result = await _sender.Send(updateCustomerCommand);
             if (result.IsError)
             {
                 return BadRequest(result.Errors);
