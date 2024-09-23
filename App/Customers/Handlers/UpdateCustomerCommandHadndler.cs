@@ -4,6 +4,7 @@ using App.Application.Customers.Commands;
 using App.Domain.Primitives;
 using App.Domain.Customers;
 using App.Domain.ValueObjects;
+using App.Domain.DomainErrors;
 
 namespace App.Application.Customers.Handlers
 {
@@ -29,22 +30,22 @@ namespace App.Application.Customers.Handlers
 
             if (!await _customerRepository.IsExistAsync(customerId))
             {
-                return Error.NotFound("Customer", "Customer not found");
+                return CustomerErrors.CustomerNotFound;
             }
 
             if (PhoneNumber.Create(command.PhoneNumber) is not PhoneNumber phoneNumber)
             {
-                return Error.Validation("Customer.PhoneNumber", "PhoneNumber has not valid format");
+                return CustomerErrors.PhoneNumberIsNotValid;
             }
 
             if (Email.Create(command.Email) is not Email email)
             {
-                return Error.Validation("Customer.Email", "Email has not valid format");
+                return CustomerErrors.PhoneNumberIsNotValid;
             }
 
             if (Address.Create(command.Country, command.Line1, command.Line2, command.City, command.State, command.ZipCode) is not Address address)
             {
-                return Error.Validation("Customer.Address", "Address has not valid format");
+                return CustomerErrors.AddressIsNotValid;
             }
 
             Customer customer = new Customer(

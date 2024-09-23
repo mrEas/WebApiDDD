@@ -1,7 +1,6 @@
 ﻿using App.Application.Customers.Commands;
 using App.Application.Customers.Queries;
 using App.Domain.Customers;
-using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

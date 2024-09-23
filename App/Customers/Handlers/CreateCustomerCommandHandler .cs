@@ -1,5 +1,6 @@
 ﻿using App.Application.Customers.Commands;
 using App.Domain.Customers;
+using App.Domain.DomainErrors;
 using App.Domain.Primitives;
 using App.Domain.ValueObjects;
 using ErrorOr;
@@ -22,18 +23,17 @@ namespace App.Application.Customers.Handlers
         {
             if (PhoneNumber.Create(command.PhoneNumber) is not PhoneNumber phoneNumber)
             {
-                return Error.Validation("Customer.PhoneNumber", "PhoneNumber has not valid format");
+                return CustomerErrors.PhoneNumberIsNotValid;
             }
 
             if (Email.Create(command.Email) is not Email email)
             {
-                return Error.Validation("Customer.Email", "Email has not valid format");
+                return CustomerErrors.EmailIssNotValid;
             }
 
             if (Address.Create(command.Country, command.Line1, command.Line2, command.City, command.State, command.ZipCode) is not Address address)
             {
-                //throw new ArgumentNullException(nameof(address));
-                return Error.Validation("Customer.Address", "Address has not valid format");
+                return CustomerErrors.AddressIsNotValid;
             }
 
             Customer customer = new Customer(

@@ -1,5 +1,6 @@
 ﻿using App.Application.Customers.Commands;
 using App.Domain.Customers;
+using App.Domain.DomainErrors;
 using App.Domain.Primitives;
 using ErrorOr;
 using MediatR;
@@ -22,9 +23,9 @@ namespace App.Application.Customers.Handlers
             var customer = await _customerRepository.GetByIdAsync(command.CustomerId);
             if (customer is null)
             {
-                return Error.NotFound("Customer.NotFound", "Customer not found.");
-
+                return CustomerErrors.CustomerNotFound;
             }
+
             _customerRepository.Delete(customer);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Unit.Value;
