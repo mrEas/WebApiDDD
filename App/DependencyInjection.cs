@@ -15,7 +15,7 @@ namespace App.Application
                 config.RegisterServicesFromAssemblyContaining<ApplicationAssemblyReference>();
             });
 
-            //Перед тем как в Application.Customers.Commands.Handle() придет Request,
+            //Перед тем как в Application.Customers.Commands метод Handle() придет Request,
             //он будет проверен валидатором Application.Customers.Commands.CreateCustomerCommandValidator
 
             //Подключили кастомные пайплайны

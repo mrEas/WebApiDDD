@@ -1,9 +1,10 @@
-﻿using App.Domain.Customers;
+﻿using App.Application.Customers.Commands;
+using App.Domain.Customers;
 using App.Domain.Primitives;
 using ErrorOr;
 using MediatR;
 
-namespace App.Application.Customers.Commands
+namespace App.Application.Customers.Handlers
 {
     public class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustomerCommand, ErrorOr<Unit>>
     {
@@ -19,7 +20,7 @@ namespace App.Application.Customers.Commands
         public async Task<ErrorOr<Unit>> Handle(DeleteCustomerCommand command, CancellationToken cancellationToken)
         {
             var customer = await _customerRepository.GetByIdAsync(command.CustomerId);
-            if(customer is null)
+            if (customer is null)
             {
                 return Error.NotFound("Customer.NotFound", "Customer not found.");
 

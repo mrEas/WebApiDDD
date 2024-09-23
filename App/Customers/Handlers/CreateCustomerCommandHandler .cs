@@ -1,10 +1,11 @@
-﻿using App.Domain.Customers;
+﻿using App.Application.Customers.Commands;
+using App.Domain.Customers;
 using App.Domain.Primitives;
 using App.Domain.ValueObjects;
 using ErrorOr;
 using MediatR;
 
-namespace App.Application.Customers.Commands
+namespace App.Application.Customers.Handlers
 {
     public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, ErrorOr<Unit>>
     {

@@ -1,10 +1,9 @@
-﻿using App.Application.Customers.Commands;
+﻿using App.Application.Customers.Queries;
 using App.Application.Customers.QueryObjects;
 using App.Domain.Customers;
-using App.Domain.Primitives;
-using MediatR;
+using MediatR; 
 
-namespace App.Application.Customers.Queries
+namespace App.Application.Customers.Handlers
 {
     public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, List<CustomerDto>>
     {
@@ -19,7 +18,7 @@ namespace App.Application.Customers.Queries
         {
             var customers = await _customerRepository.GetAllAsync();
             return customers.Select(c => new CustomerDto(
-                 c.Id,
+                 c.Id.ToString(),
                  c.FirstName,
                  c.LastName,
                  c.Email.Value,
@@ -29,8 +28,9 @@ namespace App.Application.Customers.Queries
                  c.Address.Line2,
                  c.Address.City,
                  c.Address.State,
-                 c.Address.ZipCode))
-                 .ToList();
+                 c.Address.ZipCode,
+                 c.IsActive)
+            ).ToList();
         }
 
     }

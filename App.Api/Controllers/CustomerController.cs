@@ -9,8 +9,7 @@ namespace App.Api.Controllers
     [Route("customers")]
     public class CustomerController : ControllerBase
     {
-        private readonly ISender _sender;
-
+        private readonly ISender _sender; 
         public CustomerController(ISender sender)
         {
             _sender = sender ?? throw new ArgumentNullException(nameof(sender));
@@ -25,9 +24,15 @@ namespace App.Api.Controllers
         }
 
         [HttpGet("{customerId}")]
-        public async Task<IActionResult> GetCustomer(CustomerId customerId)
+        public async Task<IActionResult> GetCustomer(string customerId)
         {
-            var query = new GetCustomerQuery(customerId);
+            if (!Guid.TryParse(customerId, out var guidId))
+            {
+                return BadRequest("Invalid customer ID");
+            }
+
+            var customerIdValue = new CustomerId(guidId);
+            var query = new GetCustomerQuery(customerIdValue);
             var result = await _sender.Send(query);
 
             if (result is null)
@@ -38,9 +43,15 @@ namespace App.Api.Controllers
         }
 
         [HttpDelete("{customerId}")]
-        public async Task<IActionResult> DeleteCustomer(CustomerId customerId)
+        public async Task<IActionResult> DeleteCustomer(string customerId)
         {
-            var query = new DeleteCustomerCommand(customerId);
+            if (!Guid.TryParse(customerId, out var guidId))
+            {
+                return BadRequest("Invalid customer ID");
+            }
+
+            var customerIdValue = new CustomerId(guidId);
+            var query = new DeleteCustomerCommand(customerIdValue);
             var result = await _sender.Send(query);
 
             if (result.IsError)
