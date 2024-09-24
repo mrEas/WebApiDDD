@@ -14,12 +14,13 @@ namespace App.Api.Controllers
                 return Problem();
             }
 
+            HttpContext.Items[HttpConstants.Errors] = errors;
+
             if (errors.All(e => e.Type == ErrorType.Validation))
             {
                 return ValidationProblem(errors);
             }
 
-            HttpContext.Items[HttpConstants.Errors] = errors;
             return Problem(errors[0]);
         }
 
@@ -31,7 +32,7 @@ namespace App.Api.Controllers
             {
                 modelState.AddModelError(error.Code, error.Description);
             }
-
+           
             return ValidationProblem(modelState);
         }
 

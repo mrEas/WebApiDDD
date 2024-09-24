@@ -21,35 +21,39 @@ namespace App.Application.Customers.Handlers
 
         public async Task<ErrorOr<Unit>> Handle(UpdateCustomerCommand command, CancellationToken cancellationToken)
         {
-            if (!Guid.TryParse(command.CustomerId, out var guidId))
-            {
-                return Error.Validation("Customer.Id", "Invalid customer ID");
-            }
+            var errors = new List<Error>();
 
-            var customerId = new CustomerId(guidId);
-
-            if (!await _customerRepository.IsExistAsync(customerId))
+            if (!await _customerRepository.IsExistAsync(new CustomerId(command.CustomerId)))
             {
                 return CustomerErrors.CustomerNotFound;
             }
 
-            if (PhoneNumber.Create(command.PhoneNumber) is not PhoneNumber phoneNumber)
+            var phoneNumber = PhoneNumber.Create(command.PhoneNumber);
+            var email = Email.Create(command.Email);
+            var address = Address.Create(command.Country, command.Line1, command.Line2, command.City, command.State, command.ZipCode);
+
+            if (phoneNumber is not PhoneNumber)
             {
-                return CustomerErrors.PhoneNumberIsNotValid;
+                errors.Add(CustomerErrors.PhoneNumberIsNotValid);
             }
 
-            if (Email.Create(command.Email) is not Email email)
+            if (email is not Email)
             {
-                return CustomerErrors.PhoneNumberIsNotValid;
+                errors.Add(CustomerErrors.PhoneNumberIsNotValid);
             }
 
-            if (Address.Create(command.Country, command.Line1, command.Line2, command.City, command.State, command.ZipCode) is not Address address)
+            if (address is not Address)
             {
-                return CustomerErrors.AddressIsNotValid;
+                errors.Add(CustomerErrors.AddressIsNotValid);
+            }
+
+            if(errors.Any())
+            {
+                return errors;
             }
 
             Customer customer = new Customer(
-               customerId,
+               new CustomerId(command.CustomerId),
                command.FirstName,
                command.LastName,
                email,

@@ -4,7 +4,7 @@ using App.Application;
 using App.Api.Middlwares;
 
 var builder = WebApplication.CreateBuilder(args);
-
+ 
 builder.Services
     .AddPresentation()
     .AddInfrastructure(builder.Configuration)
@@ -18,6 +18,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseExceptionHandler("/error");
 
 app.UseMiddleware<GlobalExeptionHandler>();
 app.MapControllers(); //Middlware Pipline

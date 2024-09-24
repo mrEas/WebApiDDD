@@ -4,7 +4,7 @@ using ErrorOr;
 namespace App.Application.Customers.Commands
 {
     public record UpdateCustomerCommand(
-        string CustomerId,
+        Guid CustomerId,
         string FirstName,
         string LastName,
         string Email,

@@ -1,11 +1,13 @@
 ﻿using App.Application.Customers.Queries;
 using App.Application.Customers.QueryObjects;
 using App.Domain.Customers;
+using App.Domain.DomainErrors;
+using ErrorOr;
 using MediatR;
 
 namespace App.Application.Customers.Handlers
 {
-    public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, CustomerDto?>
+    public class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, ErrorOr<CustomerDto>>
     {
         private readonly ICustomerRepository _customerRepository;
         public GetCustomerQueryHandler(ICustomerRepository customerRepository)
@@ -13,13 +15,17 @@ namespace App.Application.Customers.Handlers
             _customerRepository = customerRepository ?? throw new ArgumentNullException(nameof(customerRepository));
         }
 
-        public async Task<CustomerDto?> Handle(
-            GetCustomerQuery request, 
-            CancellationToken cancellationToken)
-        {             
-            var customer = await _customerRepository.GetByIdAsync(request.CustomerId);
+        public async Task<ErrorOr<CustomerDto>> Handle(GetCustomerQuery request, CancellationToken cancellationToken)
+        {
+            var customer = await _customerRepository.GetByIdAsync(new CustomerId(request.CustomerId));
+
+            if (customer == null)
+            {
+                return CustomerErrors.CustomerNotFound;
+            }
+
             return new CustomerDto(
-                 customer.Id.ToString(),
+                 request.CustomerId,
                  customer.FirstName,
                  customer.LastName,
                  customer.Email.Value,

@@ -8,7 +8,7 @@ namespace App.Application.Customers.Commands
         {
             RuleFor(r => r.FirstName)
                 .NotEmpty()
-                .MaximumLength(255);
+                .MaximumLength(1);
 
             RuleFor(r => r.LastName)
                 .NotNull()

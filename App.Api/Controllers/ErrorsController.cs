@@ -10,7 +10,7 @@ namespace App.Api.Controllers
         public IActionResult Error()
         {
             Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
-            return Problem();
+            return Problem(statusCode:StatusCodes.Status500InternalServerError, title:exception?.Message);
         }
     }
 }

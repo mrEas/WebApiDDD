@@ -1,10 +1,12 @@
 ﻿using App.Application.Customers.Queries;
 using App.Domain.Customers;
+using App.Domain.DomainErrors;
+using ErrorOr;
 using MediatR;
 
 namespace App.Application.Customers.Handlers
 {
-    public class IsCustomerExistQueryHandler : IRequestHandler<IsCustomerExistQuery, bool>
+    public class IsCustomerExistQueryHandler : IRequestHandler<IsCustomerExistQuery, ErrorOr<bool>>
     {
         private readonly ICustomerRepository _customerRepository;
         public IsCustomerExistQueryHandler(ICustomerRepository customerRepository)
@@ -12,9 +14,16 @@ namespace App.Application.Customers.Handlers
             _customerRepository = customerRepository;
         }
 
-        public Task<bool> Handle(IsCustomerExistQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<bool>> Handle(IsCustomerExistQuery request, CancellationToken cancellationToken)
         {
-            return _customerRepository.IsExistAsync(request.CustomerId);
-        }
+            var result = await _customerRepository.IsExistAsync(new CustomerId(request.CustomerId));
+            if (!result)
+            {
+                return CustomerErrors.CustomerNotFound;
+            }
+            
+            return result;
+        } 
+        
     }
 }

@@ -1,7 +1,8 @@
 ﻿using App.Domain.Customers;
+using ErrorOr;
 using MediatR; 
 
 namespace App.Application.Customers.Queries
 { 
-    public record IsCustomerExistQuery(CustomerId CustomerId) : IRequest<bool>;
+    public record IsCustomerExistQuery(Guid CustomerId) : IRequest<ErrorOr<bool>>;
 }

@@ -1,7 +1,7 @@
 ﻿namespace App.Application.Customers.QueryObjects
 {
     public record CustomerDto(
-       string Id,
+       Guid Id,
        string FirstName,
        string LastName,
        string Email,

@@ -20,7 +20,7 @@ namespace App.Application.Customers.Handlers
 
         public async Task<ErrorOr<Unit>> Handle(DeleteCustomerCommand command, CancellationToken cancellationToken)
         {
-            var customer = await _customerRepository.GetByIdAsync(command.CustomerId);
+            var customer = await _customerRepository.GetByIdAsync(new CustomerId(command.CustomerId));
             if (customer is null)
             {
                 return CustomerErrors.CustomerNotFound;

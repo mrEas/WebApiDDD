@@ -4,5 +4,5 @@ using MediatR;
 
 namespace App.Application.Customers.Commands
 {
-    public record DeleteCustomerCommand(CustomerId CustomerId) : IRequest<ErrorOr<Unit>>;
+    public record DeleteCustomerCommand(Guid CustomerId) : IRequest<ErrorOr<Unit>>;
 }

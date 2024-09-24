@@ -6,8 +6,8 @@ using System.Reflection;
 
 namespace App.Application.Common.Validation
 {
-    //cross-cutting concerns 
-    //https://www.codecrafting.tips/code-chronicles-26-application-flow-control-with-erroror/
+    //Cross-cutting concerns in MediatR pipeline
+    //ErrorOr: https://www.codecrafting.tips/code-chronicles-26-application-flow-control-with-erroror/
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TRequest>
         where TResponse : IErrorOr

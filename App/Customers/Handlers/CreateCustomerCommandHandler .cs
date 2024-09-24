@@ -21,19 +21,30 @@ namespace App.Application.Customers.Handlers
 
         public async Task<ErrorOr<Unit>> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
         {
-            if (PhoneNumber.Create(command.PhoneNumber) is not PhoneNumber phoneNumber)
+            var errors = new List<Error>();
+
+            var phoneNumber = PhoneNumber.Create(command.PhoneNumber);
+            var email = Email.Create(command.Email);
+            var address = Address.Create(command.Country, command.Line1, command.Line2, command.City, command.State, command.ZipCode);
+
+            if (phoneNumber is not PhoneNumber)
             {
-                return CustomerErrors.PhoneNumberIsNotValid;
+                errors.Add(CustomerErrors.PhoneNumberIsNotValid);
             }
 
-            if (Email.Create(command.Email) is not Email email)
+            if (email is not Email)
             {
-                return CustomerErrors.EmailIssNotValid;
+                errors.Add(CustomerErrors.EmailIssNotValid);
             }
 
-            if (Address.Create(command.Country, command.Line1, command.Line2, command.City, command.State, command.ZipCode) is not Address address)
+            if (address is not Address)
             {
-                return CustomerErrors.AddressIsNotValid;
+                errors.Add(CustomerErrors.AddressIsNotValid);
+            }
+
+            if (errors.Any())
+            {
+                return errors;
             }
 
             Customer customer = new Customer(

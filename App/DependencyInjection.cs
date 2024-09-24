@@ -1,4 +1,5 @@
 ﻿using App.Application.Common.Validation;
+using App.Application.Customers.Commands;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,8 @@ namespace App.Application
 
             //Подключили кастомные пайплайны
             services.AddScoped(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
+
+            //services.AddScoped<IValidator<CreateCustomerCommand>, CreateCustomerCommandValidator>();
 
             //Подключили валидаторы сборки
             services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();

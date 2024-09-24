@@ -3,6 +3,7 @@ using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
 namespace App.Api.Common
@@ -10,13 +11,14 @@ namespace App.Api.Common
     public class AppProblemDetailsFactory : ProblemDetailsFactory
     {
         private readonly ApiBehaviorOptions _apiBehaviorOptions;//подключаемся к атрибуту [ApiController]
-        public AppProblemDetailsFactory(ApiBehaviorOptions options)
+        public AppProblemDetailsFactory(IOptions<ApiBehaviorOptions> optionsAccessor)
         {
-            _apiBehaviorOptions = options ?? throw new ArgumentNullException(nameof(options));
+            _apiBehaviorOptions = optionsAccessor?.Value ?? throw new ArgumentNullException(nameof(optionsAccessor));
         }
+
         public override ProblemDetails CreateProblemDetails(HttpContext httpContext, int? statusCode = null, string? title = null, string? type = null, string? detail = null, string? instance = null)
         {
-            statusCode ??= 500;
+            statusCode ??= 500; 
 
             var problemDetails = new ProblemDetails
             {
@@ -67,7 +69,7 @@ namespace App.Api.Common
             }
 
             var traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
-
+            
             if (traceId is not null)
                 problemDetails.Extensions.Add(HttpConstants.TraceId, traceId);
 
@@ -75,7 +77,7 @@ namespace App.Api.Common
 
             if(errors is not null)
             {
-                problemDetails.Extensions.Add(HttpConstants.ErrorMessages, errors.Select(e=>e.Description));
+                problemDetails.Extensions[HttpConstants.ErrorMessages] = errors.Select(e => new { e.Code, e.Description });
             }
         }
     }
