@@ -8,7 +8,7 @@ namespace App.Infrastructure.Persistence
 {
     public class ApplicationDataContext : DbContext, IUnitOfWork
     {
-        private readonly IPublisher _publisher; // MediatR
+        private readonly IPublisher _publisher; 
         public DbSet<Customer> Customers { get; set; }
 
         public ApplicationDataContext(DbContextOptions<ApplicationDataContext> options, IPublisher publisher) : base(options)

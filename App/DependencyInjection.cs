@@ -22,7 +22,7 @@ namespace App.Application
             //Подключили кастомные пайплайны
             services.AddScoped(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
 
-            //services.AddScoped<IValidator<CreateCustomerCommand>, CreateCustomerCommandValidator>();
+            services.AddScoped<IValidator<CreateCustomerCommand>, CreateCustomerCommandValidator>();
 
             //Подключили валидаторы сборки
             services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using App.Domain.ValueObjects;
-namespace App.Infrastructure.Persistence.Configurations
+namespace App.Infrastructure.Persistence.Configurations.Customers
 {
     public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
     {
@@ -19,19 +19,20 @@ namespace App.Infrastructure.Persistence.Configurations
             builder.Property(c => c.LastName).HasMaxLength(255);
             builder.Property(c => c.Email).HasMaxLength(255);
             builder.Property(c => c.Email)
-                   .HasConversion(email => email.Value, value =>  Email.Create(value)!); //в базе уже есть значение, оно не null
-            
+                   .HasConversion(email => email.Value, value => Email.Create(value)!); //в базе уже есть значение, оно не null
+
             builder.Property(c => c.PhoneNumber).HasMaxLength(9);
             builder.Property(c => c.PhoneNumber)
-                   .HasConversion(phone => phone.Value, value=> PhoneNumber.Create(value)!);
+                   .HasConversion(phone => phone.Value, value => PhoneNumber.Create(value)!);
 
-            builder.OwnsOne(c => c.Address, addressBuilder => {
-                addressBuilder.Property(a=>a.Country).HasMaxLength(255);
-                addressBuilder.Property(a=>a.Line1).HasMaxLength(255);
-                addressBuilder.Property(a=>a.Line2).HasMaxLength(255);
-                addressBuilder.Property(a=>a.City).HasMaxLength(255);
-                addressBuilder.Property(a=>a.State).HasMaxLength(255);
-                addressBuilder.Property(a=>a.ZipCode).HasMaxLength(255);
+            builder.OwnsOne(c => c.Address, addressBuilder =>
+            {
+                addressBuilder.Property(a => a.Country).HasMaxLength(255);
+                addressBuilder.Property(a => a.Line1).HasMaxLength(255);
+                addressBuilder.Property(a => a.Line2).HasMaxLength(255);
+                addressBuilder.Property(a => a.City).HasMaxLength(255);
+                addressBuilder.Property(a => a.State).HasMaxLength(255);
+                addressBuilder.Property(a => a.ZipCode).HasMaxLength(255);
             });
 
             builder.Property(c => c.IsActive);
