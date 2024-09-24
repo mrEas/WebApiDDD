@@ -1,10 +1,9 @@
-﻿using App.Application.Customers.Queries;
-using App.Domain.Customers;
+﻿using App.Domain.Customers;
 using App.Domain.DomainErrors;
 using ErrorOr;
 using MediatR;
 
-namespace App.Application.Customers.Handlers
+namespace App.Application.Customers.Queries
 {
     public class IsCustomerExistQueryHandler : IRequestHandler<IsCustomerExistQuery, ErrorOr<bool>>
     {
@@ -21,9 +20,9 @@ namespace App.Application.Customers.Handlers
             {
                 return CustomerErrors.CustomerNotFound;
             }
-            
+
             return result;
-        } 
-        
+        }
+
     }
 }

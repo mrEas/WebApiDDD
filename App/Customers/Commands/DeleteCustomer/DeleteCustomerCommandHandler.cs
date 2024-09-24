@@ -1,11 +1,10 @@
-﻿using App.Application.Customers.Commands;
-using App.Domain.Customers;
+﻿using App.Domain.Customers;
 using App.Domain.DomainErrors;
 using App.Domain.Primitives;
 using ErrorOr;
 using MediatR;
 
-namespace App.Application.Customers.Handlers
+namespace App.Application.Customers.Commands
 {
     public class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustomerCommand, ErrorOr<Unit>>
     {

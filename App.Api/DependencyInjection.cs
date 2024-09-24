@@ -1,6 +1,5 @@
 ﻿using App.Api.Common;
 using App.Api.Middlwares;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace App.Api

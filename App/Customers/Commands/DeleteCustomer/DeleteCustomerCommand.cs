@@ -1,5 +1,4 @@
-﻿using App.Domain.Customers;
-using ErrorOr;
+﻿using ErrorOr;
 using MediatR;
 
 namespace App.Application.Customers.Commands

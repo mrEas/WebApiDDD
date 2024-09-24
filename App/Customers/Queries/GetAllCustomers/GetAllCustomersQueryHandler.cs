@@ -1,11 +1,10 @@
-﻿using App.Application.Customers.Queries;
-using App.Application.Customers.QueryObjects;
+﻿using App.Application.Customers.QueryObjects;
 using App.Domain.Customers;
 using App.Domain.DomainErrors;
 using ErrorOr;
-using MediatR; 
+using MediatR;
 
-namespace App.Application.Customers.Handlers
+namespace App.Application.Customers.Queries
 {
     public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, ErrorOr<List<CustomerDto>>>
     {

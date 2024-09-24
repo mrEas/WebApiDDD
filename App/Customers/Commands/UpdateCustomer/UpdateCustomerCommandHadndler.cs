@@ -1,12 +1,11 @@
 ﻿using MediatR;
 using ErrorOr;
-using App.Application.Customers.Commands;
 using App.Domain.Primitives;
 using App.Domain.Customers;
 using App.Domain.ValueObjects;
 using App.Domain.DomainErrors;
 
-namespace App.Application.Customers.Handlers
+namespace App.Application.Customers.Commands
 {
     public class UpdateCustomerCommandHadndler : IRequestHandler<UpdateCustomerCommand, ErrorOr<Unit>>
     {
@@ -47,7 +46,7 @@ namespace App.Application.Customers.Handlers
                 errors.Add(CustomerErrors.AddressIsNotValid);
             }
 
-            if(errors.Any())
+            if (errors.Any())
             {
                 return errors;
             }
