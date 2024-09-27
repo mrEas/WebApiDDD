@@ -4,8 +4,7 @@ using App.Infrastructure.Persistence.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Reflection.Emit;
+using Microsoft.Extensions.Configuration; 
 
 namespace App.Infrastructure.Persistence
 {
@@ -27,8 +26,8 @@ namespace App.Infrastructure.Persistence
         {
             _configuration = configuration;
         }
-       
-        //dotnet ef migrations add Initial -c ApplicationIdentityContext -s App.Api -p App.Infrastructure -o Persistence/IdentityMigrations
+
+        //dotnet ef migrations add Initial -c ApplicationIdentityContext -s App.Api -p App.Infrastructure -o Persistence/Migrations/IdentityMigrations
         //dotnet ef database update -c ApplicationIdentityContext -s App.Api -p App.Infrastructure 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

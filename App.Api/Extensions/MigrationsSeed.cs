@@ -7,18 +7,23 @@ namespace App.Api.Extensions
     {
         public async static Task ApplyMigrationAsync(this WebApplication app)
         {
+            await ApplyMigrationForContext<ApplicationDataContext>(app);
+            await ApplyMigrationForContext<ApplicationIdentityContext>(app);
+        }
+
+        private static async Task ApplyMigrationForContext<TContext>(WebApplication app) where TContext : DbContext
+        {
             using var scope = app.Services.CreateScope();
 
             try
             {
-                var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDataContext>();
-                await applicationDbContext.Database.MigrateAsync();
+                var dbContext = scope.ServiceProvider.GetRequiredService<TContext>();
+                await dbContext.Database.MigrateAsync();
             }
             catch (Exception ex)
             {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDataContext>>();
-
-                logger.LogError(ex, "an error occured during seed migrations");
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<TContext>>();
+                logger.LogError(ex, "An error occurred during migrations for {DbContextName}", typeof(TContext).Name);
             }
         }
     }
