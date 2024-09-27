@@ -42,10 +42,7 @@ namespace App.Application.Customers.Commands
                 return CustomerErrors.AddressIsNotValid;
             }
 
-            if (await _customerRepository.IsExistsByEmailAsync(email))
-            {
-                return CustomerErrors.EmailAlreadyExists;
-            }
+           
 
             if (await _customerRepository.IsExistsByPhoneAsync(phoneNumber))
             {

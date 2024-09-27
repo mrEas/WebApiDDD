@@ -19,10 +19,10 @@ namespace App.Infrastructure.Repositories
         public async Task<List<Customer>> GetAllAsync() => await _context.Customers.ToListAsync();
         public async Task<Customer?> GetByIdAsync(CustomerId id) => await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
         public async Task<bool> IsExistAsync(CustomerId id) => await _context.Customers.AnyAsync(c => c.Id == id);
-        
-        public async Task<bool> IsExistsByEmailAsync(Email email) => await _context.Customers.AnyAsync(c => c.Email.Value == email.Value.ToString());
-        public async Task<bool> IsExistsByPhoneAsync(PhoneNumber phone) => await _context.Customers.AnyAsync(c => c.PhoneNumber.Value == phone.Value.ToString()); 
-         
+
+        public async Task<bool> IsExistsByEmailAsync(Email email) => await _context.Customers.AnyAsync(c => c.Email.Value == email.Value);
+        public async Task<bool> IsExistsByPhoneAsync(PhoneNumber phone) => await _context.Customers.Where(c => c.PhoneNumber.Value == phone.Value).AnyAsync();
+
 
     }
 }

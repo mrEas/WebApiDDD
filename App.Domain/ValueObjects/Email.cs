@@ -13,6 +13,7 @@ namespace App.Domain.ValueObjects
 
         private Email(string value) => Value = value;
         public string Value { get; init; }
+        public static explicit operator string(Email email) => email.Value;
 
         public static Email? Create(string value)
         {
