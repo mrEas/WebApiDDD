@@ -8,6 +8,7 @@ using System.Diagnostics;
 
 namespace App.Api.Common
 {
+    //https://github.com/dotnet/aspnetcore/blob/main/src/Mvc/Mvc.Core/src/Infrastructure/DefaultProblemDetailsFactory.cs
     public class AppProblemDetailsFactory : ProblemDetailsFactory
     {
         private readonly ApiBehaviorOptions _apiBehaviorOptions;//подключаемся к атрибуту [ApiController]
@@ -47,11 +48,16 @@ namespace App.Api.Common
             var validationDetails = new ValidationProblemDetails
             {
                 Status = statusCode,
-                Title = title,
                 Type = type,
                 Detail = detail,
                 Instance = instance
             };
+
+            if (title != null)
+            {
+                // For validation problem details, don't overwrite the default title with null.
+                validationDetails.Title = title;
+            }
 
             EnrichProblemDetails(httpContext, validationDetails, statusCode.Value);
 

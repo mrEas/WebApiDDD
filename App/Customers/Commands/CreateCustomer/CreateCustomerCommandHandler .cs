@@ -19,31 +19,31 @@ namespace App.Application.Customers.Commands
         }
 
         public async Task<ErrorOr<Unit>> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
-        {
-            var errors = new List<Error>();
+        { 
 
-            var phoneNumber = PhoneNumber.Create(command.PhoneNumber);
-            var email = Email.Create(command.Email);
-            var address = Address.Create(command.Country, command.Line1, command.Line2, command.City, command.State, command.ZipCode);
-
-            if (phoneNumber is not PhoneNumber)
+            if (PhoneNumber.Create(command.PhoneNumber) is not PhoneNumber phoneNumber)
             {
-                errors.Add(CustomerErrors.PhoneNumberIsNotValid);
+                return CustomerErrors.PhoneNumberIsNotValid;
             }
 
-            if (email is not Email)
+            if (Email.Create(command.Email) is not Email email)
             {
-                errors.Add(CustomerErrors.EmailIssNotValid);
+                return CustomerErrors.EmailIsNotValid;
             }
 
-            if (address is not Address)
+            if (Address.Create(command.Country, command.Line1, command.Line2, command.City, command.State, command.ZipCode) is not Address address)
             {
-                errors.Add(CustomerErrors.AddressIsNotValid);
+                return CustomerErrors.AddressIsNotValid;
             }
 
-            if (errors.Any())
+            if (await _customerRepository.IsExistsByEmailAsync(email))
             {
-                return errors;
+                return CustomerErrors.EmailAlreadyExists;
+            }
+
+            if (await _customerRepository.IsExistsByPhoneAsync(phoneNumber))
+            {
+                return CustomerErrors.PhoneAlreadyExists;
             }
 
             Customer customer = new Customer(

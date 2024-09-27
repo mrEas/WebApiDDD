@@ -13,7 +13,7 @@ namespace App.Application.Common.Validation
         where TResponse : IErrorOr
     {
         private readonly IValidator<TRequest>? _validator;
-        public ValidationBehavior(IValidator<TRequest>? validator)
+        public ValidationBehavior(IValidator<TRequest>? validator = null)
         {
             _validator = validator;
         }
@@ -37,6 +37,7 @@ namespace App.Application.Common.Validation
                 : throw new FluentValidation.ValidationException(validationResult.Errors);
         }
 
+        //https://www.codecrafting.tips/code-chronicles-26-application-flow-control-with-erroror/
         private static bool TryCreateResponseFromErrors(List<ValidationFailure> validationFailures, out TResponse response)
         {
             List<Error> errors = validationFailures.ConvertAll(x => Error.Validation(

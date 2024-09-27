@@ -20,8 +20,8 @@ namespace App.Api.Controllers
             {
                 return ValidationProblem(errors);
             }
-
-            return Problem(errors[0]);
+             
+            return Problem(errors);
         }
 
         private IActionResult ValidationProblem(List<Error> errors)

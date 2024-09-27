@@ -6,6 +6,7 @@ namespace App.Api.Extensions
 {
     public static class SeedData
     {
+       //https://github.com/dotnet/blazor-samples/blob/main/8.0/BlazorWebAssemblyStandaloneWithIdentity/Backend/SeedData.cs
         public async static Task SeedDataAsync(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();

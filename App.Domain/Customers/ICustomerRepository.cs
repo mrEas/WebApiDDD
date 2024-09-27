@@ -1,4 +1,6 @@
-﻿namespace App.Domain.Customers
+﻿using App.Domain.ValueObjects;
+
+namespace App.Domain.Customers
 {
     public interface ICustomerRepository
     {
@@ -8,5 +10,7 @@
         void Update(Customer customer);
         void Delete(Customer customer);
         Task<bool> IsExistAsync(CustomerId id);
+        Task<bool> IsExistsByEmailAsync(Email email);
+        Task<bool> IsExistsByPhoneAsync(PhoneNumber phone);
     }
 }
