@@ -5,6 +5,7 @@ using App.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace App.Infrastructure
 {
@@ -14,6 +15,9 @@ namespace App.Infrastructure
         {
             services.AddDbContext<ApplicationDataContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("Default")));
+
+            services.AddDbContext<ApplicationIdentityContext>(options =>
+             options.UseNpgsql(configuration.GetConnectionString("Default")));
 
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDataContext>());
             services.AddScoped<ICustomerRepository, CustomerRepository>();

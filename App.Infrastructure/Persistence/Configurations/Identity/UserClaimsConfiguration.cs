@@ -8,8 +8,8 @@ namespace App.Infrastructure.Persistence.Configurations.Identity
     {
         public void Configure(EntityTypeBuilder<IdentityUserClaim<string>> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("UserClaims");
         }
-      
+
     }
 }

@@ -1,18 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace App.Infrastructure.Persistence.Configurations.Identity
 {
-    public class RoleClaimsConfiguration : IEntityTypeConfiguration<ApplicationRoleConfiguration>
+    public class RoleClaimsConfiguration : IEntityTypeConfiguration<IdentityRoleClaim<string>>
     {
-        public void Configure(EntityTypeBuilder<ApplicationRoleConfiguration> builder)
+        public void Configure(EntityTypeBuilder<IdentityRoleClaim<string>> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("RoleClaims");
         }
     }
     }

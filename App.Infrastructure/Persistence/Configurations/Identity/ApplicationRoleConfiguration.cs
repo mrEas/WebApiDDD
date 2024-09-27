@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using App.Infrastructure.Persistence.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace App.Infrastructure.Persistence.Configurations.Identity
 {
-    public class ApplicationRoleConfiguration : IEntityTypeConfiguration<ApplicationRoleConfiguration>
+    public class ApplicationRoleConfiguration : IEntityTypeConfiguration<ApplicationRole>
     {
-        public void Configure(EntityTypeBuilder<ApplicationRoleConfiguration> builder)
+        public void Configure(EntityTypeBuilder<ApplicationRole> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("Roles"); 
         }
     }
 }

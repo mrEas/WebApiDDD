@@ -1,18 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace App.Infrastructure.Persistence.Configurations.Identity
 {
-    public class UserTokensConfiguration : IEntityTypeConfiguration<ApplicationRoleConfiguration>
+    public class UserTokensConfiguration : IEntityTypeConfiguration<IdentityUserToken<string>>
     {
-        public void Configure(EntityTypeBuilder<ApplicationRoleConfiguration> builder)
+        public void Configure(EntityTypeBuilder<IdentityUserToken<string>> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("UserTokens");
+            //builder.HasKey(x => new { x.UserId, x.LoginProvider,x.Name });
         }
     }
 }

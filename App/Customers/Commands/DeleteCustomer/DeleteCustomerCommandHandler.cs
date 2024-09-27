@@ -19,9 +19,7 @@ namespace App.Application.Customers.Commands
 
         public async Task<ErrorOr<Unit>> Handle(DeleteCustomerCommand command, CancellationToken cancellationToken)
         {
-            var customer = await _customerRepository.GetByIdAsync(new CustomerId(command.CustomerId));
-            if (customer is null)
-            {
+            if (await _customerRepository.GetByIdAsync(new CustomerId(command.CustomerId)) is not Customer customer){ 
                 return CustomerErrors.CustomerNotFound;
             }
 

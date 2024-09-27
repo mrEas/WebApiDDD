@@ -1,18 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace App.Infrastructure.Persistence.Configurations.Identity
 {
-    public class UserLoginsConfiguration : IEntityTypeConfiguration<ApplicationRoleConfiguration>
+    public class UserLoginsConfiguration : IEntityTypeConfiguration<IdentityUserLogin<string>>
     {
-        public void Configure(EntityTypeBuilder<ApplicationRoleConfiguration> builder)
+        public void Configure(EntityTypeBuilder<IdentityUserLogin<string>> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("UserLogins");
+            //builder.HasKey(x => new { x.LoginProvider, x.ProviderKey });
         }
     }
-    }
+}

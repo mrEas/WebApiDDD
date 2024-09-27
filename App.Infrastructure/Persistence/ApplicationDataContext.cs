@@ -1,11 +1,13 @@
-﻿
-using App.Domain.Customers;
+﻿using App.Domain.Customers;
 using App.Domain.Primitives;
+using App.Infrastructure.Persistence.Configurations.Customers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.Infrastructure.Persistence
 {
+    //dotnet ef migrations add Initial -c ApplicationDataContext -s App.Api -p App.Infrastructure -o Persistence/Migrations
+    //dotnet ef database update -c ApplicationDataContext -s App.Api -p App.Infrastructure 
     public class ApplicationDataContext : DbContext, IUnitOfWork
     {
         private readonly IPublisher _publisher; 
@@ -15,12 +17,11 @@ namespace App.Infrastructure.Persistence
         {
             _publisher = publisher?? throw new ArgumentNullException(nameof(publisher));
         }
-         
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {            
-            // все конфиги которые хранятся в сборке будут автоматом подключены
-            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDataContext).Assembly);
+        {
+            //modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDataContext).Assembly);
+            modelBuilder.ApplyConfiguration(new CustomerConfiguration());
         }
 
         //IUnitOfWork

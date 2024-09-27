@@ -1,19 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using App.Infrastructure.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace App.Infrastructure.Persistence.Configurations.Identity
+namespace App.Infrastructure.Persistence.Configurations.Identity;
+
+public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationRoleConfiguration>
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        public void Configure(EntityTypeBuilder<ApplicationRoleConfiguration> builder)
-        {
-            throw new NotImplementedException();
-        }
-    
-}
+        builder.ToTable("Users");
+        builder.Property(x => x.FirstName).HasMaxLength(50);
+        builder.Property(x => x.LastName).HasMaxLength(50);
+        builder.Property(x => x.DisplayName).HasMaxLength(50);
+
+        builder.HasMany(x => x.Roles)
+            .WithOne()
+            .HasForeignKey(x => x.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }
