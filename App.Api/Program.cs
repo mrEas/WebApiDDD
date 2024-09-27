@@ -13,15 +13,17 @@ builder.Services
  
 var app = builder.Build();
 
+await app.ApplyMigrationAsync();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    //app.UseDeveloperExceptionPage();
+    //app.UseDeveloperExceptionPage(); 
 }
 
-await app.ApplyMigrationAsync();
+
 //app.UseExceptionHandler("/error");
 
 app.UseMiddleware<GlobalExeptionHandler>();

@@ -6,9 +6,15 @@ namespace App.Api.Extensions
     public static class MigrationsSeed
     {
         public async static Task ApplyMigrationAsync(this WebApplication app)
-        {
+        { 
             await ApplyMigrationForContext<ApplicationDataContext>(app);
             await ApplyMigrationForContext<ApplicationIdentityContext>(app);
+            
+            if (app.Environment.IsDevelopment())
+            {
+                await app.SeedDataAsync();
+            }
+
         }
 
         private static async Task ApplyMigrationForContext<TContext>(WebApplication app) where TContext : DbContext
