@@ -18,7 +18,6 @@ namespace App.Infrastructure.Persistence
         IdentityRoleClaim<string>,
         IdentityUserToken<string>>
     {
-
         private const string SCHEME = "Identity";
         private readonly IConfiguration _configuration;
 
@@ -29,10 +28,10 @@ namespace App.Infrastructure.Persistence
 
         //dotnet ef migrations add Initial -c ApplicationIdentityContext -s App.Api -p App.Infrastructure -o Persistence/Migrations/IdentityMigrations
         //dotnet ef database update -c ApplicationIdentityContext -s App.Api -p App.Infrastructure 
+        //dotnet ef database drop -c ApplicationIdentityContext -s App.Api -p App.Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Default"));
-
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString(SCHEME));
             base.OnConfiguring(optionsBuilder);
         }
 

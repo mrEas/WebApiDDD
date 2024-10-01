@@ -8,6 +8,8 @@ namespace App.Infrastructure.Persistence
 {
     //dotnet ef migrations add Initial -c ApplicationDataContext -s App.Api -p App.Infrastructure -o Persistence/Migrations
     //dotnet ef database update -c ApplicationDataContext -s App.Api -p App.Infrastructure 
+    //dotnet ef database drop  -c ApplicationDataContext -s App.Api -p App.Infrastructure 
+
     public class ApplicationDataContext : DbContext, IUnitOfWork
     {
         private readonly IPublisher _publisher; 

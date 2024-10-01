@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace App.Domain.ValueObjects
 {
@@ -15,6 +10,8 @@ namespace App.Domain.ValueObjects
         private PhoneNumber(string value) => Value = value;
         public string Value { get; init; }
 
+        // Only to support ef core query.
+        public static explicit operator string(PhoneNumber phone) => phone.Value;
         public static PhoneNumber? Create(string value)
         {
             if (string.IsNullOrEmpty(value)

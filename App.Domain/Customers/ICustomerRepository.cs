@@ -12,5 +12,6 @@ namespace App.Domain.Customers
         Task<bool> IsExistAsync(CustomerId id);
         Task<bool> IsExistsByEmailAsync(Email email);
         Task<bool> IsExistsByPhoneAsync(PhoneNumber phone);
+        Task<Customer?> GetByEmail(Email email);
     }
 }

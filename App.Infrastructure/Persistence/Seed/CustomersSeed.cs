@@ -1,16 +1,14 @@
 ﻿using App.Domain.Customers;
 using App.Domain.ValueObjects;
-using App.Infrastructure.Persistence;
 
-namespace App.Api.Extensions
+namespace App.Infrastructure.Persistence.Seed
 {
-    public static class SeedData
+    public static class CustomersSeed
     {
-       //https://github.com/dotnet/blazor-samples/blob/main/8.0/BlazorWebAssemblyStandaloneWithIdentity/Backend/SeedData.cs
-        public async static Task SeedDataAsync(this WebApplication app)
+        public static async Task SeedDataAsync(ApplicationDataContext applicationDbContext)
         {
-            using var scope = app.Services.CreateScope();
-            var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDataContext>();
+            //using var scope = app.Services.CreateScope();
+            //var applicationDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDataContext>();
 
             if (!applicationDbContext.Customers.Any())
             {
@@ -54,7 +52,6 @@ namespace App.Api.Extensions
 
                 await applicationDbContext.SaveChangesAsync();
             }
-
         }
     }
 }
