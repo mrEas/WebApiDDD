@@ -2,7 +2,6 @@
 using App.Infrastructure.Persistence.Models;
 using App.Infrastructure.Persistence.Seed;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace App.Api.Extensions
 {

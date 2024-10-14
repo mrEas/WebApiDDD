@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using App.Infrastructure.Auth.Implementations;
+using App.Infrastructure.Auth.Abstractions;
 namespace App.Infrastructure
 {
     public static class DependencyInjection
@@ -19,13 +21,19 @@ namespace App.Infrastructure
 
             services.AddIdentity(configuration);
 
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssemblyContaining<InfrastructureAssemblyReference>();
+            });
+
+            services.AddScoped<IJWTGenerator, JWTGenerator>();
+             
             return services;
         }
 
         private static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
-        {
-            
-            services.AddSingleton(TimeProvider.System); //для Identity
+        { 
+            //services.AddSingleton(TimeProvider.System); //для Identity
             services.AddDbContext<ApplicationIdentityContext>(options => options.UseNpgsql(configuration.GetConnectionString("Identity")));
 
             var builder = services.AddIdentityCore<ApplicationUser>(); //add UserType

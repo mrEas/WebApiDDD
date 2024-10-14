@@ -36,7 +36,6 @@ namespace App.Application.Customers.Commands
                 return CustomerErrors.AddressIsNotValid;
             }
 
-
             try
             {
                 var s = await _customerRepository.IsExistsByEmailAsync(email);

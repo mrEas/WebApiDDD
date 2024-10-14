@@ -2,6 +2,7 @@
 using App.Application.Customers.Queries;
 using App.Domain.Customers;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -9,6 +10,7 @@ namespace App.Api.Controllers
 {
     [ApiController]
     [Route("customers")]
+    [Authorize]
     public class CustomerController : ApiControllerBase
     {
         private readonly ISender _sender;
