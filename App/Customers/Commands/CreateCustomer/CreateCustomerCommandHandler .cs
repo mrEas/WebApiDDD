@@ -20,7 +20,7 @@ namespace App.Application.Customers.Commands
         }
 
         public async Task<ErrorOr<Unit>> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
-        { 
+        {
             if (PhoneNumber.Create(command.PhoneNumber) is not PhoneNumber phoneNumber)
             {
                 return CustomerErrors.PhoneNumberIsNotValid;
@@ -36,23 +36,10 @@ namespace App.Application.Customers.Commands
                 return CustomerErrors.AddressIsNotValid;
             }
 
-            try
-            {
-                var s = await _customerRepository.IsExistsByEmailAsync(email);
-            }
-            catch (Exception ex)
-            {
-                // Логируйте ошибку
-                Debug.WriteLine($"Error checking if email exists: {ex.Message}");
-                throw; // Перебросьте исключение, если нужно
-            }
-
-            //if (await _customerRepository.IsExistsByEmailAsync(email))
-           /* var f = await _customerRepository.IsExistsByEmailAsync(email);
-            if (f != null)
+            if (await _customerRepository.IsExistsByEmailAsync(email))
             {
                 return CustomerErrors.EmailAlreadyExists;
-            }*/
+            }
 
             if (await _customerRepository.IsExistsByPhoneAsync(phoneNumber))
             {
