@@ -20,8 +20,9 @@ namespace App.Api.Controllers
             {
                 return ValidationProblem(errors);
             }
-             
-            return Problem(errors);
+
+            var firstError = errors.First();
+            return Problem(firstError);
         }
 
         private IActionResult ValidationProblem(List<Error> errors)
