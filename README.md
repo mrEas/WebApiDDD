@@ -1,3 +1,18 @@
+# WebApiDDD - Implementation of DDD, CQRS
+
+## Features
+
+- ASP.NET Core 8.0 Web API application
+- Clean Architecture implementation with applying SOLID principles
+- Domain-driven Design (DDD)
+- xUnit-based Test-driven Design (TDD)
+- CQRS implementation on Commands, Queries and Projections
+- MediatR implementation (Request- and Notification-Handling, Pipeline-Behaviour for Validation)
+- Swagger Open API endpoint
+- Dockerfile and Docker Compose (YAML) file for environmental setup
+- Postgress Repository
+- Authentication Service based on ASP.NET Core Idenity
+
 ## Getting started
 
 To get this project up and running as is, feel free to follow these steps:
